@@ -1,0 +1,9 @@
+h1, p, input {
+    font-family: 'Lato', sans-serif;
+}
+h2, p, input {
+  font-family: "Times New Roman", Times, serif;
+}
+#languageContainer {
+    margin: 20px;
+}
