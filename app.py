@@ -1,10 +1,17 @@
+from time import sleep
+
 import cv2
 import numpy as np
 import types
 import easygui
 from easygui import *
 import webbrowser
-
+import os
+from pathlib import Path
+from flask import Flask, render_template, request, redirect
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import  FileStorage
+app = Flask(__name__)
 
 def messageToBinary(message):
   if type(message) == str:
@@ -64,23 +71,39 @@ def showData(image):
           break
   return decoded_data[:-5]
 
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+        return render_template('upload.html')
 
+
+fname=""
+
+@app.route('/uploader', methods=['GET', 'POST'])
+def uploader():
+    if request.method == 'POST':
+        f = request.files['file']
+        f.save(secure_filename(f.filename))
+        fstr=str(f)
+        global fname
+        fname=fstr.split()[-2].replace("'", "")
+        return render_template('encode.html')
+
+@app.route("/encode_text", methods=["GET", "POST"])
 def encode_text():
-    image_name = easygui.enterbox("Enter image name(with extension): ")
-    image = cv2.imread(image_name)
-
-    webbrowser.open(image_name)
-
+    image = cv2.imread(fname)
+    webbrowser.open(fname)
     data = easygui.enterbox("Enter data to be encoded : ")
     if (len(data) == 0):
         raise ValueError('Data is empty')
-
     filename = easygui.enterbox("Enter the name of new encoded image(with extension): ")
     encoded_image = hideData(image,data)
     cv2.imwrite(filename, encoded_image)
+    msgbox("encoding completed")
+    return redirect("http://localhost:5000/")
 
-
+@app.route("/decode_text", methods=["GET", "POST"])
 def decode_text():
+    print("The Steganographed image is as shown below: ")
     image_name = easygui.enterbox("Enter the name of the steganographed image that you want to decode (with extension) :")
     image = cv2.imread(image_name)
 
@@ -91,6 +114,7 @@ def decode_text():
     text = showData(image)
     return text
 
+@app.route("/Steganography", methods=["GET", "POST"])
 
 def Steganography():
     a = easygui.enterbox("Image Steganography \n 1. Encode the data \n 2. Decode the data \n Your input is: ")
@@ -107,5 +131,11 @@ def Steganography():
     else:
         raise Exception("Enter correct input")
 
+@app.route("/", methods=["GET", "POST"])
 
-Steganography()
+def index():
+        return render_template('index.html')
+
+
+if __name__ == "__main__":
+    app.run(debug=True, threaded=True)
