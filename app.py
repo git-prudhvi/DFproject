@@ -104,12 +104,12 @@ def encode_text():
 @app.route("/decode_text", methods=["GET", "POST"])
 def decode_text():
     print("The Steganographed image is as shown below: ")
-    image_name = easygui.enterbox("Enter the name of the steganographed image that you want to decode (with extension) :")
-    image = cv2.imread(image_name)
+
+    image = cv2.imread(fname)
 
     print("The Steganographed image is as shown below: ")
 
-    webbrowser.open(image_name)
+    webbrowser.open(fname)
 
     text = showData(image)
     return text

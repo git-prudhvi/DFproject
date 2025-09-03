@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Image Steganography</title>
+    <link rel="stylesheet" href="static/styles/index.css" />
+</head>
+<body>
+    <div id="speechContainer">
+        <h1>Image Steganography</h1>
+        <p>Encode a secret message inside an image or decode a hidden message from an image. All processing happens locally in your browser.</p>
+
+        <div class="button-row">
+            <button id="tab-encode" class="btn primary">Encode</button>
+            <button id="tab-decode" class="btn secondary">Decode</button>
+        </div>
+
+        <section id="encode-section" style="margin-top:24px">
+            <h2>Encode</h2>
+            <form id="encode-form" onsubmit="return false" class="card">
+                <div class="field">
+                    <label class="field-label" for="encode-image">Cover image</label>
+                    <input class="field-input" type="file" id="encode-image" accept="image/*" required />
+                </div>
+                <div class="field">
+                    <label class="field-label" for="encode-message">Message</label>
+                    <textarea class="field-textarea" id="encode-message" rows="4" placeholder="Enter the text to hide" required></textarea>
+                </div>
+                <div class="field">
+                    <label class="field-label" for="encode-secret">Secret code (max 5 characters)</label>
+                    <input class="field-input" type="text" id="encode-secret" maxlength="5" placeholder="e.g. 12345" required />
+                </div>
+                <div class="subtext" id="encode-capacity"></div>
+                <div class="button-row">
+                    <button id="encode-button" class="btn primary">Encode Message</button>
+                </div>
+            </form>
+        </section>
+
+        <section id="decode-section" style="display:none; margin-top:24px">
+            <h2>Decode</h2>
+            <form id="decode-form" onsubmit="return false" class="card">
+                <div class="field">
+                    <label class="field-label" for="decode-image">Encoded image</label>
+                    <input class="field-input" type="file" id="decode-image" accept="image/*" required />
+                </div>
+                <div class="field">
+                    <label class="field-label" for="decode-secret">Secret code</label>
+                    <input class="field-input" type="text" id="decode-secret" maxlength="5" placeholder="Enter the secret code used for encoding" required />
+                </div>
+                <div class="button-row">
+                    <button id="decode-button" class="btn primary">Decode Message</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- Encode Modal -->
+    <div id="encode-modal" class="modal hidden" aria-hidden="true">
+        <div class="modal-backdrop" data-close="encode-modal"></div>
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="encode-modal-title">
+            <div class="modal-header">
+                <h3 id="encode-modal-title">Encoded Image</h3>
+                <button class="icon-button" data-close="encode-modal" aria-label="Close">✕</button>
+            </div>
+            <div class="modal-body">
+                <canvas id="encode-canvas" class="canvas-preview"></canvas>
+            </div>
+            <div class="modal-footer">
+                <a id="download-link" class="btn primary" download="encoded.png">Download</a>
+                <button class="btn secondary" data-close="encode-modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Decode Modal -->
+    <div id="decode-modal" class="modal hidden" aria-hidden="true">
+        <div class="modal-backdrop" data-close="decode-modal"></div>
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="decode-modal-title">
+            <div class="modal-header">
+                <h3 id="decode-modal-title">Decoded Message</h3>
+                <button class="icon-button" data-close="decode-modal" aria-label="Close">✕</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="decoded-text" class="field-textarea" rows="6" readonly></textarea>
+            </div>
+            <div class="modal-footer">
+                <button id="copy-decoded" class="btn primary">Copy</button>
+                <button class="btn secondary" data-close="decode-modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/steghide.js"></script>
+</body>
+</html>
+
+
