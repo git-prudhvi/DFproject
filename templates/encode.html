@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DF PEER MENTORS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}" />
+</head>
+<body>
+    <div id="speechContainer">
+        <h2>press the button to start encoding process</h1>
+      <form method="post" action="encode_text" enctype="multipart/form-data">
+            <br>
+            <input type="submit" id="actual-btn" hidden/>
+                <center><label for="actual-btn">ENCODE IMAGE</label></center>
+        </form>
+   </div>
+
+   </body>
+</html>
